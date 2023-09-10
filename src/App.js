@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import { Route, Routes} from 'react-router-dom';
+import React , {createContext,useContext,useState} from 'react';
+
+
+import Home from './pages/Home';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import About from './pages/About';
+import Otp from './pages/Otp';
+import HomeBtech from './pages/HomeBtech';
+import { LoginContexts } from './context/LoginContext';
+
+const App = () => {
+const [userLogin,setUserLogin]=useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <LoginContexts.Provider value={{setUserLogin}}>
+      <Navbar login={userLogin}/>
+      <Routes>
+      <Route path="/home-bca" element={<Home />} />
+       <Route path="/home-btech" element={<HomeBtech />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/otp/:id" element={<Otp />} />
+      </Routes>
+      </LoginContexts.Provider>
+    </>
   );
-}
+};
 
 export default App;
