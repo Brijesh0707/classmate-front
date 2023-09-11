@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Link ,useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const naviagate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     branch: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,6 +21,8 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsSubmitting(true);
+
     try {
       const response = await fetch('https://classmate-server.onrender.com/register/user', {
         method: 'POST',
@@ -31,13 +34,15 @@ const Register = () => {
 
       if (response.status === 200) {
         alert('Registration successful');
-        naviagate("/");
+        navigate('/');
       } else {
         const data = await response.json();
         console.log('Registration failed:', data.message);
       }
     } catch (error) {
       console.error('Error during registration:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -91,15 +96,31 @@ const Register = () => {
               <option value='' disabled>Select Branch</option>
               <option value='bca'>BCA</option>
               <option value='btech'>BTECH</option>
-
             </select>
           </div>
           <div className='text-center'>
             <button
-              className='bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none'
+              className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none ${isSubmitting ? 'cursor-not-allowed' : ''}`}
               type='submit'
+              disabled={isSubmitting}
             >
-              Register
+              {isSubmitting ? (
+                <svg
+                  className='animate-spin h-5 w-5 mr-3'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 8.962 0 014.157 11H0v2h4a9.956 9.956 0 012-1.709V17z'
+                  ></path>
+                </svg>
+              ) : (
+                'Register'
+              )}
             </button>
             <br />
             <Link className='text-blue-300' to='/'>

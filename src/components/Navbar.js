@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Navbar = ({login}) => {
+const Navbar = ({ login }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const [branch, setBranch] = useState(localStorage.getItem('branch'));
@@ -28,7 +28,6 @@ const Navbar = ({login}) => {
         <div className="hidden md:flex space-x-4 no-underline">
           {login ? (
             <>
-              <Link className="text-white no-underline">User Profile</Link>
               <Link to="/about" className="text-white no-underline">
                 About us
               </Link>
@@ -39,13 +38,17 @@ const Navbar = ({login}) => {
                 Logout
               </button>
             </>
-          ) : (
+          ) : (<>
             <Link
               to="/"
               className="text-white no-underline bg-red-600 w-[70px] h-[30px] pt-1 text-center"
             >
               Login
             </Link>
+            <Link to="/about" className="text-white no-underline">
+                About us
+              </Link>
+              </>
           )}
         </div>
         <div className="md:hidden flex items-center">
@@ -73,22 +76,26 @@ const Navbar = ({login}) => {
       </div>
       {isMenuOpen && (
         <div className="md:hidden text-center py-4">
-          {branch ? (
+          {login ? (
             <>
-              <a href="#" className="block text-white py-2 no-underline">
-                User Profile
-              </a>
-              <a href="#" className="block text-white py-2 no-underline">
-                About Us
-              </a>
-              <a href="#" className="block text-white py-2 no-underline">
+              <Link to="/about" className="text-white no-underline">
+                About us
+              </Link>
+              <button
+                className="text-white no-underline bg-red-600 w-[70px] h-[30px] pt-1 text-center"
+                onClick={handleLogout}
+              >
                 Logout
-              </a>
+              </button>
             </>
-          ) : (
-            <Link to="/login" className="block text-white py-2 no-underline">
+          ) : (<>
+            <Link to="/" className="block text-white py-2 no-underline">
               Login
             </Link>
+            <Link to="/about" className="text-white no-underline">
+                About us
+              </Link>
+              </>
           )}
         </div>
       )}

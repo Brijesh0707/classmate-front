@@ -10,11 +10,11 @@ const Home = () => {
   const branch = localStorage.getItem('branch');
 
   const user = JSON.parse(localStorage.getItem('User')) || { name: 'Default User' };
-  useEffect(()=>{
-    if(!user.token || !branch==="bca"){
-      navigate("/");
+  useEffect(() => {
+    if (!user.token || branch !== 'bca') {
+      navigate('/');
     }
-  },[navigate,branch])
+  }, [navigate, branch, user.token]);
 
   const handleSendMessage = async () => {
     if (messageInput.trim() === '') return;
@@ -66,10 +66,13 @@ const Home = () => {
   return (
     <div className='bg-black w-full h-screen flex flex-col justify-center items-center'>
       <h1 className='text-white text-center py-4 text-2xl'>ClassMate Chats - BCA</h1>
-      <ReactScrollableFeed className='bg-slate-900 flex flex-col  border border-green-700 overflow-x-auto w-[98%] h-[70%]  items-center' style={{ scrollBehavior: 'smooth' }} >
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : (
+      <ReactScrollableFeed className='bg-slate-900 flex flex-col border border-green-700 overflow-x-auto w-[98%] h-[70%] items-center relative' style={{ scrollBehavior: 'smooth' }}>
+        {isLoading && (
+          <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center'>
+            <div className='animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500'></div>
+          </div>
+        )}
+        {!isLoading &&
           messages.map((message, index) => (
             <div
               key={index}
@@ -80,8 +83,7 @@ const Home = () => {
               </h6>
               <p className='whitespace-wrap break-words text-white'>{message.message}</p>
             </div>
-          ))
-        )}
+          ))}
       </ReactScrollableFeed>
       <div className='flex p-4 w-[340px] mb-3 justify-center text-center'>
         <input

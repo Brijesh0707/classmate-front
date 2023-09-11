@@ -9,11 +9,9 @@ const Login = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
- 
   const branch = localStorage.getItem('branch');
 
   useEffect(() => {
-   
     if (branch) {
       if (branch === 'bca') {
         navigate('/home-bca');
@@ -51,10 +49,8 @@ const Login = () => {
         alert('OTP has been sent to your email. Please check your spam folder.');
         setIsSubmitting(false);
 
-        
         const data = await response.json();
 
-     
         localStorage.setItem('branch', data.branch);
 
         navigate(`/otp/${formData.email}`);
@@ -106,11 +102,27 @@ const Login = () => {
           </div>
           <div className='text-center'>
             <button
-              className='bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none'
+              className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none ${isSubmitting ? 'cursor-not-allowed' : ''}`}
               type='submit'
-              disabled={isSubmitting} 
+              disabled={isSubmitting}
             >
-              Submit
+              {isSubmitting ? (
+                <svg
+                  className='animate-spin h-5 w-5 mr-3'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 8.962 0 014.157 11H0v2h4a9.956 9.956 0 012-1.709V17z'
+                  ></path>
+                </svg>
+              ) : (
+                'Submit'
+              )}
             </button>
             <br />
             <p className='mt-3 text-white'>
